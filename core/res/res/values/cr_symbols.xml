@@ -1,0 +1,5 @@
+
+  <!-- Hardware keys on/off option -->
+  <java-symbol type="bool" name="config_hwKeysPref" />
+
+</resources>
