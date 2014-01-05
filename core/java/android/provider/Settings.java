@@ -3613,6 +3613,22 @@ public final class Settings {
         public static final String GESTURE_ANYWHERE_POSITION = "gesture_anywhere_position";
 
         /**
+         * Settings for clock font style
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_FONT_STYLE = "statusbar_clock_font_style";
+
+        /**
+         * Wether to show network speed indicators
+         * 0: download
+         * 1: upload
+         * 2: download and upload
+         * default: 2
+         * @hide
+         */   
+        public static final String STATUS_BAR_ENABLE_NETWORK_SPEED_INDICATOR = "status_bar_enable_network_speed_indicator";
+
+        /**
          * Last time gestures were altered.
          * Used to determine if gestures should be reloaded by the view.
          * @hide
