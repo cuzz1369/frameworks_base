@@ -13,7 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.android.internal.util.candy;
+package com.android.internal.util.slim;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.ContentResolver;
@@ -82,6 +82,11 @@ public class DeviceUtils {
 
     public static boolean deviceSupportsGps(Context context) {
         return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+    }
+
+    public static boolean deviceSupportsImeSwitcher(Context ctx) {
+        Resources res = ctx.getResources();
+        return res.getBoolean(com.android.internal.R.bool.config_show_IMESwitcher);
     }
 
     public static boolean adbEnabled(ContentResolver resolver) {
