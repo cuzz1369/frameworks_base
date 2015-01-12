@@ -3787,7 +3787,7 @@ public final class Settings {
          */
         public static final String HEADS_UP_TOUCH_OUTSIDE = "heads_up_touch_outside";
 
-	/**
+	   /**
          * Heads Up background color
          * @hide
          */
@@ -3798,6 +3798,12 @@ public final class Settings {
          * @hide
          */
         public static final String HEADS_UP_TEXT_COLOR = "heads_up_text_color";
+
+        /**
+         * Alternative recent apps integration using OmniSwitch
+         * @hide
+         */
+        public static final String RECENTS_USE_OMNISWITCH = "recents_use_omniswitch";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
