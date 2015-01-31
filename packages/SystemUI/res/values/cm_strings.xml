@@ -252,7 +252,7 @@
     <string name="quick_settings_screenrecord_on">Recording ...</string>
     <string name="quick_settings_themes">Themes</string>
     <string name="quick_settings_kernel_adiutor">Kernel Adiutor</string>
-
+    <string name="quick_settings_screenshot">Screenshot</string>
     <string name="quick_settings_music_play">Play</string>
     <string name="quick_settings_music_pause">Pause</string>
 

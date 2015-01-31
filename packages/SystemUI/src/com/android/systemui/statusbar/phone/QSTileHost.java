@@ -64,6 +64,7 @@ import com.android.systemui.qs.tiles.SyncTile;
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.ScreenrecordTile;
+import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.ScreenTimeoutTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.CandyTile;
@@ -393,6 +394,8 @@ public class QSTileHost implements QSTile.Host {
                 return new KernelAdiutorTile(this);
             case QSConstants.TILE_MUSIC:
                 return new MusicTile(this);
+            case QSConstants.TILE_SCREENSHOT:
+                return new ScreenshotTile(this);
             default:
                 throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
         }
