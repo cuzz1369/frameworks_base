@@ -54,6 +54,8 @@ public class QSConstants {
     public static final String TILE_WIFI = "wifi";
     public static final String TILE_THEMES = "toggleThemes"; 
     public static final String TILE_KERNEL_ADIUTOR = "kernel_adiutor";
+    public static final String TILE_MUSIC = "music";
+
     public static final String DYNAMIC_TILE_NEXT_ALARM = "next_alarm";
     public static final String DYNAMIC_TILE_IME_SELECTOR = "ime_selector";
     public static final String DYNAMIC_TILE_SU = "su";
@@ -97,6 +99,7 @@ public class QSConstants {
         STATIC_TILES_AVAILABLE.add(TILE_WIFI);
  	STATIC_TILES_AVAILABLE.add(TILE_THEMES);
  	STATIC_TILES_AVAILABLE.add(TILE_KERNEL_ADIUTOR);
+ 	STATIC_TILES_AVAILABLE.add(TILE_MUSIC);
 
         DYNAMIC_TILES_AVAILABLE.add(DYNAMIC_TILE_NEXT_ALARM);
         DYNAMIC_TILES_AVAILABLE.add(DYNAMIC_TILE_IME_SELECTOR);
