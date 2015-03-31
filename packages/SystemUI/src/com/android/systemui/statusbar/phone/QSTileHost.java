@@ -63,6 +63,7 @@ import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.ScreenTimeoutTile;
 import com.android.systemui.qs.tiles.WifiTile;
+import com.android.systemui.qs.tiles.CandyTile;
 import com.android.systemui.settings.CurrentUserTracker;
 import com.android.systemui.statusbar.CustomTileData;
 import com.android.systemui.statusbar.policy.BluetoothController;
@@ -368,10 +369,10 @@ public class QSTileHost implements QSTile.Host {
                 return new UsbTetherTile(this);
             case QSConstants.TILE_HEADS_UP:
                 return new HeadsUpTile(this);
-            case QSConstants.TILE_AMBIENT_DISPLAY:
-                return new AmbientDisplayTile(this);
             case QSConstants.TILE_SYNC:
                 return new SyncTile(this);
+            case QSConstants.TILE_CANDY:
+		return new CandyTile(this);
             default:
                 throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
         }
