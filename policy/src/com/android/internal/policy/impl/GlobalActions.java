@@ -103,7 +103,7 @@ import java.util.UUID;
 
 
 import static com.android.internal.util.cm.PowerMenuConstants.*;
-import com.android.internal.util.cmremix.OnTheGoActions;
+import com.android.internal.util.candy.OnTheGoActions;
 
 /**
  * Helper to show the global actions dialog.  Each item is an {@link Action} that
@@ -141,6 +141,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     // Power menu customizations
     String mActions;
     boolean mProfilesEnabled;
+    private int mScreenshotDelay;
 
     /**
      * @param context everything needs a context :(
@@ -215,6 +216,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private void handleShow() {
         awakenIfNecessary();
+        checkSettings();
         prepareDialog();
 
         // If we only have 1 item and it's a simple press action, just do this action.
@@ -736,7 +738,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
                         /* wait for the dialog box to close */
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(mScreenshotDelay * 1000);
                         } catch (InterruptedException ie) {
                             // Do nothing
                         }
@@ -826,7 +828,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
 
     private void startOnTheGo() {
         final ComponentName cn = new ComponentName("com.android.systemui",
-                "com.android.systemui.cmremix.onthego.OnTheGoService");
+                "com.android.systemui.candy.onthego.OnTheGoService");
         final Intent startIntent = new Intent();
         startIntent.setComponent(cn);
         startIntent.setAction("start");
@@ -1483,6 +1485,11 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         canvas.setMatrix(m);
         canvas.drawCircle(inWidth / 2, inHeight / 2, inWidth / 2, paint);
         return output;
+    }
+
+    private void checkSettings() {
+        mScreenshotDelay = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.SCREENSHOT_DELAY, 1);
     }
 
     private static final class GlobalActionsDialog extends Dialog implements DialogInterface {
