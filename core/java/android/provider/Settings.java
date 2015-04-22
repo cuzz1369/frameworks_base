@@ -3576,6 +3576,12 @@ public final class Settings {
         public static final String GESTURE_ANYWHERE_ENABLED = "gesture_anywhere_enabled";
 
         /**
+         * Setting for clock color
+         * @hide
+         */
+        public static final String STATUSBAR_CLOCK_COLOR = "statusbar_clock_color";
+        
+        /**
          * Position of gesture anywhere trigger.  Value is either Gravity.LEFT or Gravity.RIGHT
          * @hide
          */
