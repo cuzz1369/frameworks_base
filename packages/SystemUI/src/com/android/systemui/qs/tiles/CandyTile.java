@@ -78,7 +78,7 @@ public class CandyTile extends QSTile<QSTile.BooleanState> {
     @Override
     protected void handleUpdateState(BooleanState state, Object arg) {
         state.visible = true;
-        state.iconId = R.drawable.ic_qs_candy_on;
+	state.icon = ResourceIcon.get(R.drawable.ic_qs_candy_on);
         state.label = mContext.getString(R.string.quick_settings_candy_on);
 
 	}
