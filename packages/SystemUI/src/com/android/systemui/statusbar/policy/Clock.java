@@ -246,7 +246,14 @@ public class Clock implements DemoMode {
             } else {
                 dateString = DateFormat.format(clockDateFormat, now) + " ";
             }
-            result = dateString.toString().toLowerCase() + result;
+            if (mClockDateStyle == CLOCK_DATE_STYLE_LOWERCASE) {
+                // When Date style is small, convert date to uppercase
+                result = dateString.toString().toLowerCase() + result;
+            } else if (mClockDateStyle == CLOCK_DATE_STYLE_UPPERCASE) {
+                result = dateString.toString().toUpperCase() + result;
+            } else {
+                result = dateString.toString() + result;
+            }
         }
 
         SpannableStringBuilder formatted = new SpannableStringBuilder(result);
