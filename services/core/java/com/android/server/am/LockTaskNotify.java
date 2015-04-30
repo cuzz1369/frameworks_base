@@ -24,12 +24,10 @@ import android.os.Message;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.view.WindowManager;
-import android.view.WindowManagerPolicy;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.android.internal.R;
-import com.android.internal.policy.PolicyManager;
 
 /**
  *  Helper to manage showing/hiding a image to notify them that they are entering
@@ -40,7 +38,6 @@ public class LockTaskNotify {
 
     private final Context mContext;
     private final H mHandler;
-    private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
     private AccessibilityManager mAccessibilityManager;
     private Toast mLastToast;
     private boolean mDevForceNavbar;
@@ -59,19 +56,15 @@ public class LockTaskNotify {
     }
 
     public void handleShowToast(boolean isLocked) {
-        final int textResId;
-        if (isLocked) {
-            textResId = R.string.lock_to_app_toast_locked;
-        } else if (mAccessibilityManager.isEnabled()) {
-            textResId = R.string.lock_to_app_toast_accessible;
-        } else {
-            textResId = (mPolicy.hasNavigationBar() || mDevForceNavbar)
-                    ? R.string.lock_to_app_toast : R.string.lock_to_app_toast_no_navbar;
+        String text = mContext.getString(isLocked
+                ? R.string.lock_to_app_toast_locked : getStringForInterface());
+        if (!isLocked && mAccessibilityManager.isEnabled()) {
+            text = mContext.getString(getStringForInterface());
         }
         if (mLastToast != null) {
             mLastToast.cancel();
         }
-        mLastToast = makeAllUserToastAndShow(mContext.getString(textResId));
+        mLastToast = makeAllUserToastAndShow(text);
     }
 
     public void show(boolean starting) {
@@ -88,6 +81,23 @@ public class LockTaskNotify {
                 WindowManager.LayoutParams.PRIVATE_FLAG_SHOW_FOR_ALL_USERS;
         toast.show();
         return toast;
+    }
+
+    private int getStringForInterface() {
+        // hard key no bar showing
+        if (!mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_showNavigationBar)
+                && Settings.System.getIntForUser(mContext.getContentResolver(),
+                        Settings.Secure.DEV_FORCE_SHOW_NAVBAR, 0, UserHandle.USER_CURRENT) == 0) {
+            return R.string.lock_to_app_hardkey_toast;
+            // NX
+        } else if (Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.NAVIGATION_BAR_MODE, 0, UserHandle.USER_CURRENT) == 1) {
+            return R.string.lock_to_app_nx_toast;
+            // normal navbar
+        } else {
+            return R.string.lock_to_app_navbar_toast;
+        }
     }
 
     private final class H extends Handler {
