@@ -1418,22 +1418,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return ViewConfiguration.getGlobalActionKeyTimeout();
     }
 
-    private void cancelPendingScreenshotChordAction() {
-        mHandler.removeCallbacks(mScreenshotRunnable);
-    }
-
     private void cancelPendingScreenrecordChordAction() {
         mHandler.removeCallbacks(mScreenrecordRunnable);
     }
-
-
-    private final Runnable mGlobalMenu = new Runnable() {
-        @Override
-        public void run() {
-            sendCloseSystemWindows(SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS);
-            showGlobalActionsInternal(false);
-        }
-    };
 
     private final Runnable mEndCallLongPress = new Runnable() {
         @Override
