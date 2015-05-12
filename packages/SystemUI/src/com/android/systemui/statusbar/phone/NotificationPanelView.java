@@ -157,6 +157,7 @@ public class NotificationPanelView extends PanelView implements
 
     private boolean mBlockTouches;
     private int mNotificationScrimWaitDistance;
+
     // Used for two finger gesture as well as accessibility shortcut to QS.
     private boolean mQsExpandImmediate;
     private boolean mTwoFingerQsExpandPossible;
@@ -747,6 +748,12 @@ public class NotificationPanelView extends PanelView implements
                         && !mStatusBar.hasActiveClearableNotifications())) {
             oneFingerQsOverride = true;
         }
+
+        if ((twoFingerQsEvent || oneFingerQsOverride)
+                && event.getY(event.getActionIndex()) < mStatusBarMinHeight
+                && !isQSEventBlocked) {
+            mQsExpandImmediate = true;
+            requestPanelHeightUpdate();
 
             // Normally, we start listening when the panel is expanded, but here we need to start
             // earlier so the state is already up to date when dragging down.
