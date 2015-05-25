@@ -316,7 +316,7 @@ public class KeyButtonView extends ImageView {
 
         if (mActions != null) {
             if (mActions.singleAction != null && mActionHandler.isSecureToFire(mActions.singleAction)) {
-                mActionHandler.performTask(mActions.singleAction);
+                ActionHandler.performTask(mContext, mActions.singleAction);
                 sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
             }
         }
@@ -329,7 +329,7 @@ public class KeyButtonView extends ImageView {
                 if (mIsRecentsDoubleTapAction) {
                     ActionHandler.toggleRecentApps();
                 } else {
-                    mActionHandler.performTask(mActions.doubleTapAction);
+                    ActionHandler.performTask(mContext, mActions.doubleTapAction);
                 }
             }
         }
@@ -337,8 +337,8 @@ public class KeyButtonView extends ImageView {
 
     private void doLongPress() {
         if (KeyButtonView.this.getId() == R.id.recent_apps
-                && mActionHandler.isLockTaskOn()) {
-            mActionHandler.turnOffLockTask();
+                && ActionHandler.isLockTaskOn()) {
+            ActionHandler.turnOffLockTask();
             mDoOverrideSingleTap = true;
             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
@@ -351,7 +351,7 @@ public class KeyButtonView extends ImageView {
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                     } else {
-                        mActionHandler.performTask(mActions.longPressAction);
+                        ActionHandler.performTask(mContext, mActions.longPressAction);
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                     }
