@@ -1646,7 +1646,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // eos action handler
         filter = new IntentFilter();
         filter.addAction(ActionHandler.INTENT_SHOW_POWER_MENU);
-        filter.addAction(ActionHandler.INTENT_TOGGLE_SCREENRECORD);
         filter.addAction(ActionHandler.INTENT_SCREENSHOT);
         context.registerReceiver(mActionsReceiver, filter);
 
