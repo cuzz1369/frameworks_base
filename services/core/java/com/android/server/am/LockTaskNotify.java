@@ -43,7 +43,7 @@ public class LockTaskNotify {
     private final WindowManagerPolicy mPolicy = PolicyManager.makeNewWindowManager();
     private AccessibilityManager mAccessibilityManager;
     private Toast mLastToast;
-    private boolean mDevForceNavbar;
+    private boolean mHasNavigationBar;
 
     public LockTaskNotify(Context context) {
         mContext = context;
@@ -65,7 +65,7 @@ public class LockTaskNotify {
         } else if (mAccessibilityManager.isEnabled()) {
             textResId = R.string.lock_to_app_toast_accessible;
         } else {
-            textResId = (mPolicy.hasNavigationBar() || mDevForceNavbar)
+            textResId = (mPolicy.hasNavigationBar() || mHasNavigationBar)
                     ? R.string.lock_to_app_toast : R.string.lock_to_app_toast_no_navbar;
         }
         if (mLastToast != null) {
@@ -110,4 +110,18 @@ public class LockTaskNotify {
 
         void observe() {
 
+            // Observe all users' changes
+            final ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                            Settings.System.NAVIGATION_BAR_SHOW), false, this,
+                    UserHandle.USER_ALL);
+            onChange(true);
+        }
+
+        @Override public void onChange(boolean selfChange) {
+            final ContentResolver resolver = mContext.getContentResolver();
+            mHasNavigationBar = Settings.System.getIntForUser(resolver,
+                    Settings.System.NAVIGATION_BAR_SHOW, 0, UserHandle.USER_CURRENT) == 1;
+        }
+    }
 }
