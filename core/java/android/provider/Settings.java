@@ -4287,6 +4287,14 @@ public final class Settings {
          */
         public static final String HARDWARE_BUTTON_BACK_LONGPRESS = "hardware_button_back_longpress";
 
+
+        /**
+         * nx logo animates
+         * 
+         * @hide
+         */
+        public static final String NX_LOGO_COLOR = "nx_logo_color";
+
         /**
          * home key long press action
          * 

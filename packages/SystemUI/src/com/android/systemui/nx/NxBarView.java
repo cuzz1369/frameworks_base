@@ -35,6 +35,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -115,6 +116,9 @@ public class NxBarView extends BaseNavigationBar implements NxSurface {
             mContext.getContentResolver().registerContentObserver(
                     Settings.System.getUriFor(Settings.System.NX_RIPPLE_ENABLED), false,
                     NxBarObserver.this, UserHandle.USER_ALL);
+            mContext.getContentResolver().registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NX_LOGO_COLOR), false,
+                    NxBarObserver.this, UserHandle.USER_ALL);
         }
 
         void unregister() {
@@ -125,6 +129,7 @@ public class NxBarView extends BaseNavigationBar implements NxSurface {
         public void onChange(boolean selfChange, Uri uri) {
             updateLogoEnabled();
             updateLogoAnimates();
+            updateLogoColor();
             updatePulseEnabled();
             int lpTimeout = Settings.System.getIntForUser(mContext.getContentResolver(),
                     Settings.System.NX_LONGPRESS_TIMEOUT, mGestureDetector.LP_TIMEOUT_MAX, UserHandle.USER_CURRENT);
@@ -217,6 +222,7 @@ public class NxBarView extends BaseNavigationBar implements NxSurface {
         super.onFinishInflate();
         updateLogoEnabled();
         updateLogoAnimates();
+        updateLogoColor();
         updatePulseEnabled();
     }
 
@@ -231,6 +237,14 @@ public class NxBarView extends BaseNavigationBar implements NxSurface {
                 Settings.System.NX_LOGO_ANIMATES, 1, UserHandle.USER_CURRENT) == 1;
         for (NxLogoView v : ActionUtils.getAllChildren(NxBarView.this, NxLogoView.class)) {
             v.setSpinEnabled(logoAnimates);
+        }
+    }
+
+    private void updateLogoColor() {
+        int color = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.NX_LOGO_COLOR, Color.WHITE, UserHandle.USER_CURRENT);
+        for (NxLogoView v : ActionUtils.getAllChildren(NxBarView.this, NxLogoView.class)) {
+            v.setLogoColor(color);
         }
     }
 
