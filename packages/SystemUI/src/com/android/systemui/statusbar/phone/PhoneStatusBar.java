@@ -192,7 +192,6 @@ import com.android.systemui.statusbar.policy.NextAlarmController;
 import com.android.systemui.statusbar.policy.PreviewInflater;
 import com.android.systemui.statusbar.policy.RotationLockControllerImpl;
 import com.android.systemui.statusbar.policy.SecurityControllerImpl;
-import com.android.systemui.statusbar.policy.SuControllerImpl;
 import com.android.systemui.statusbar.policy.UserInfoController;
 import com.android.systemui.statusbar.policy.UserSwitcherController;
 import com.android.systemui.statusbar.policy.ZenModeController;
@@ -295,7 +294,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
     BrightnessMirrorController mBrightnessMirrorController;
     AccessibilityController mAccessibilityController;
     WeatherControllerImpl mWeatherController;
-    SuControllerImpl mSuController;
 
     int mNaturalBarHeight = -1;
     int mIconSize = -1;
@@ -473,8 +471,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_DISMISS_ON_REMOVE), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_TICKER_ENABLED),false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.BATTERY_SAVER_MODE_COLOR), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -494,23 +490,14 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             resolver.unregisterContentObserver(this);
         }
 
-        @Override
-        public void onChange(boolean selfChange) {
+         @Override
+         public void onChange(boolean selfChange) {
             update();
         }
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-             if (uri.equals(Settings.System.getUriFor(
-                       Settings.System.STATUS_BAR_TICKER_ENABLED))) {
-                       mTickerEnabled = Settings.System.getIntForUser(
-                             mContext.getContentResolver(),
-                             Settings.System.STATUS_BAR_TICKER_ENABLED,
-                             mContext.getResources().getBoolean(R.bool.enable_ticker)
-                          ? 1 : 0, UserHandle.USER_CURRENT) == 1;
-                  initTickerView();
-			  }
-			if (uri.equals(Settings.System.getUriFor(
+              if (uri.equals(Settings.System.getUriFor(
                     Settings.System.BATTERY_SAVER_MODE_COLOR))) {
                     mBatterySaverWarningColor = Settings.System.getIntForUser(
                             mContext.getContentResolver(),
@@ -534,6 +521,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 			 
        
+
 
         @Override
         public void update() {
@@ -640,8 +628,8 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         @Override
         protected void observe() {
             super.observe();
-            ContentResolver resolver = mContext.getContentResolver();            
-           resolver.registerContentObserver(Settings.Secure.getUriFor(
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.DEV_FORCE_SHOW_NAVBAR), false, this, UserHandle.USER_ALL);
         }
 
@@ -667,7 +655,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // If we have no Navbar view and we should have one, create it
         if (mNavigationBarView != null) {
             return;
-       }
+        }
 
         mNavigationBarView =
                 (NavigationBarView) View.inflate(mContext, R.layout.navigation_bar, null);
@@ -710,7 +698,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     Settings.Global.HEADS_UP_OFF);
             mHeadsUpTicker = mUseHeadsUp && 0 != Settings.Global.getInt(
                     mContext.getContentResolver(), SETTING_HEADS_UP_TICKER, 0);
-            mTickerEnabled = !mUseHeadsUp;
             Log.d(TAG, "heads up is " + (mUseHeadsUp ? "enabled" : "disabled"));
             mHeadsUpUserEnabled = 0 != Settings.System.getIntForUser(
                     mContext.getContentResolver(), Settings.System.HEADS_UP_USER_ENABLED,
@@ -727,7 +714,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                     addHeadsUpView();
                 }
             }
-            initTickerView();
         }
     };
 
@@ -934,7 +920,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
 
         // Lastly, call to the icon policy to install/update all the icons.
-        mIconPolicy = new PhoneStatusBarPolicy(mContext, mCastController, mHotspotController, mSuController);
+        mIconPolicy = new PhoneStatusBarPolicy(mContext, mCastController, mHotspotController);
         mSettingsObserver.onChange(false); // set up
 
         mHeadsUpObserver.onChange(true); // set up
@@ -1144,13 +1130,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         R.id.keyguard_indication_text));
         mKeyguardBottomArea.setKeyguardIndicationController(mKeyguardIndicationController);
 
-        mTickerEnabled = Settings.System.getIntForUser(mContext.getContentResolver(),
-                    Settings.System.STATUS_BAR_TICKER_ENABLED,
-                    mContext.getResources().getBoolean(R.bool.enable_ticker)
-                            ? 1 : 0, UserHandle.USER_CURRENT) == 1;
-
-        initTickerView();
-
         mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
 
         mBatterySaverWarningColor = Settings.System.getIntForUser(
@@ -1183,7 +1162,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                         mDozeServiceHost.firePowerSaveChanged(mBatteryController.isPowerSave());
                     }
                 }
-
+       
                 @Override
                 public void onBatteryLevelChanged(int level, boolean pluggedIn, boolean charging) {
                     // noop
@@ -1219,9 +1198,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         if (mCastController == null) {
             mCastController = new CastControllerImpl(mContext);
-        }
-        if (mSuController == null) {
-            mSuController = new SuControllerImpl(mContext);
         }
         if (mNetworkController == null) {
             mNetworkController = new NetworkControllerImpl(mContext);
@@ -1465,21 +1441,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         return mStatusBarWindow;
     }
 
-    private void initTickerView() {
-        if (mTickerEnabled && (mTicker == null || mTickerView == null)) {
-            final ViewStub tickerStub = (ViewStub) mStatusBarView.findViewById(R.id.ticker_stub);
-        if (tickerStub != null) {
-            mTickerView = tickerStub.inflate();
-            mTicker = new MyTicker(mContext, mStatusBarView);
-
-            TickerView tickerView = (TickerView) mStatusBarView.findViewById(R.id.tickerText);
-            tickerView.mTicker = mTicker;
-      } else {
-           mTickerEnabled = false;
-          }
-       }
-    }
-  
     @Override
     protected WindowManager.LayoutParams getSearchLayoutParams(LayoutParams layoutParams) {
         boolean opaque = false;
@@ -1957,12 +1918,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         StatusBarNotification old = removeNotificationViews(key, ranking);
         if (SPEW) Log.d(TAG, "removeNotification key=" + key + " old=" + old);
 
-        if (old != null) {
-            // Cancel the ticker if it's still running
-            if (mTickerEnabled && shouldInterrupt(old)) {
-                mTicker.removeEntry(old);
-            }
-
             // Recalculate the position of the sliding windows and the titles.
             updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
 
@@ -1975,8 +1930,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
                 }
             }
         }
-        setAreThereNotifications();
-    }
 
     @Override
     protected void refreshLayout(int layoutDirection) {
@@ -3591,8 +3544,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         // because...  well, what's the point otherwise?  And trying to
         // run a ticker without being attached will crash!
         if (n.getNotification().tickerText != null && mStatusBarWindow != null
-                && mStatusBarWindow.getWindowToken() != null
-                && shouldInterrupt(n)) {
+                && mStatusBarWindow.getWindowToken() != null) {
             if (0 == (mDisabled & (StatusBarManager.DISABLE_NOTIFICATION_ICONS
                     | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
                 mTicker.addEntry(n);

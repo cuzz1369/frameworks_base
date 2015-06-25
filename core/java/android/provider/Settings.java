@@ -2277,13 +2277,6 @@ public final class Settings {
         public static final String QS_USE_MAIN_TILES = Secure.QS_USE_MAIN_TILES;
 
         /**
-         * Whether to enable ticker animation in statusbar
-         *
-         * @hide
-         */
-        public static final String STATUS_BAR_TICKER_ENABLED = "status_bar_ticker_enabled";
-
-        /**
          * Control whether the process CPU usage meter should be shown.
          *
          * @deprecated Use {@link Global#SHOW_PROCESSES} instead
