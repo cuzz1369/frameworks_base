@@ -58,7 +58,14 @@ import com.android.systemui.qs.tiles.ProfilesTile;
 import com.android.systemui.qs.tiles.PerfProfileTile;
 import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
+<<<<<<< HEAD
+<<<<<<< HEAD
 import com.android.systemui.qs.tiles.SyncTile;
+=======
+>>>>>>> 37dc4b3... Fw_Base - Final clean-up
+=======
+import com.android.systemui.qs.tiles.SlimActionTile;
+>>>>>>> 4cecbfc... Framework: SlimAction as QuickTile (1/2)
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.ScreenrecordTile;
@@ -366,6 +373,8 @@ public class QSTileHost implements QSTile.Host {
                 return new ScreenTimeoutTile(this);
             case QSConstants.TILE_LIVE_DISPLAY:
                 return new LiveDisplayTile(this);
+            case QSConstants.TILE_SLIMACTION:
+                return new SlimActionTile(this);
             case QSConstants.TILE_USB_TETHER:
                 return new UsbTetherTile(this);
             case QSConstants.TILE_HEADS_UP:

@@ -26,17 +26,28 @@ import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.Display;
+<<<<<<< HEAD
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
+=======
+import android.view.HapticFeedbackConstants;
+>>>>>>> 83e91ef... Frameworks: Keyguard - Add user configurable shortcuts
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+<<<<<<< HEAD
 import com.android.internal.util.candy.AppHelper;
 import com.android.internal.util.candy.ActionHelper;
 import com.android.internal.util.candy.ActionConfig;
 import com.android.internal.util.candy.Action;
+=======
+import com.android.internal.util.slim.AppHelper;
+import com.android.internal.util.slim.ActionHelper;
+import com.android.internal.util.slim.ActionConfig;
+import com.android.internal.util.slim.Action;
+>>>>>>> 83e91ef... Frameworks: Keyguard - Add user configurable shortcuts
 import com.android.internal.widget.LockPatternUtils;
 
 import com.android.keyguard.R;
@@ -88,8 +99,13 @@ public class KeyguardShortcuts extends LinearLayout {
         }
         setVisibility(View.VISIBLE);
 
+<<<<<<< HEAD
         int clickType = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.LOCKSCREEN_SHORTCUTS_LONGPRESS, 1, UserHandle.USER_CURRENT);
+=======
+        boolean longpress = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_SHORTCUTS_LONGPRESS, 1, UserHandle.USER_CURRENT) == 1;
+>>>>>>> 83e91ef... Frameworks: Keyguard - Add user configurable shortcuts
 
         ActionConfig actionConfig;
 
@@ -112,6 +128,7 @@ public class KeyguardShortcuts extends LinearLayout {
                     mContext, mPackageManager, actionConfig.getClickAction()));
             i.setClickable(true);
 
+<<<<<<< HEAD
             if (clickType == 0) {
                 i.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -137,6 +154,9 @@ public class KeyguardShortcuts extends LinearLayout {
                     }
                 });
             } else {
+=======
+            if (longpress) {
+>>>>>>> 83e91ef... Frameworks: Keyguard - Add user configurable shortcuts
                 i.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
@@ -145,8 +165,20 @@ public class KeyguardShortcuts extends LinearLayout {
                         return true;
                     }
                 });
+<<<<<<< HEAD
             }
 
+=======
+            } else {
+                i.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        doHapticKeyClick(HapticFeedbackConstants.VIRTUAL_KEY);
+                        Action.processAction(mContext, action, false);
+                    }
+                });
+            }
+>>>>>>> 83e91ef... Frameworks: Keyguard - Add user configurable shortcuts
             addView(i);
             if (j+1 < actionConfigs.size()) {
                 addSeparator();

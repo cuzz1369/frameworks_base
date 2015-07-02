@@ -1584,6 +1584,14 @@ public class InputMethodService extends AbstractInputMethodService {
                 mHandler.postDelayed(restoreAutoRotation, mKeyboardRotationTimeout);
             }
         }
+
+        // IME softkeyboard is hiding. Notify EdgeGestureService.
+        IEdgeGestureService edgeGestureService = getEdgeGestureService();
+        try {
+            if (edgeGestureService != null) {
+                edgeGestureService.setImeIsActive(false);
+            }
+        }
     }
 
     final Runnable restoreAutoRotation = new Runnable() {
@@ -2286,8 +2294,21 @@ public class InputMethodService extends AbstractInputMethodService {
         }
         return true;
     }
-    
+
     IStatusBarService getStatusBarService() {
+        synchronized (mServiceAquireLock) {
+            if (mStatusBarService == null) {
+                mStatusBarService = IStatusBarService.Stub.asInterface(
+                        ServiceManager.getService("statusbar"));
+            }
+            return mStatusBarService;
+        }
+    }
+
+    /**
+     * If not set till now get EdgeGestureService.
+     */
+    private IEdgeGestureService getEdgeGestureService() {
         synchronized (mServiceAquireLock) {
             if (mStatusBarService == null) {
                 mStatusBarService = IStatusBarService.Stub.asInterface(
