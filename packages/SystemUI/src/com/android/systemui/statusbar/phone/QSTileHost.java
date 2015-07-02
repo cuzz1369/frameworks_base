@@ -58,7 +58,10 @@ import com.android.systemui.qs.tiles.ProfilesTile;
 import com.android.systemui.qs.tiles.PerfProfileTile;
 import com.android.systemui.qs.tiles.RoamingTile;
 import com.android.systemui.qs.tiles.RotationLockTile;
+<<<<<<< HEAD
 import com.android.systemui.qs.tiles.SyncTile;
+=======
+>>>>>>> 37dc4b3... Fw_Base - Final clean-up
 import com.android.systemui.qs.tiles.UsbTetherTile;
 import com.android.systemui.qs.tiles.VisualizerTile;
 import com.android.systemui.qs.tiles.ScreenrecordTile;

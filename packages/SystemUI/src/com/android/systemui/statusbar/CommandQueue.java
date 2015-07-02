@@ -105,9 +105,9 @@ public class CommandQueue extends IStatusBar.Stub {
         public void notificationLightOff();
         public void notificationLightPulse(int argb, int onMillis, int offMillis);
         public void showScreenPinningRequest();
-        public void scheduleHeadsUpClose();
-        public void showCustomIntentAfterKeyguard(Intent intent);
-        public void setAutoRotate(boolean enabled);
+        public void toggleLastApp();
+        public void toggleKillApp();
+        public void toggleScreenshot();
     }
 
     public CommandQueue(Callbacks callbacks, StatusBarIconList list) {
@@ -263,12 +263,7 @@ public class CommandQueue extends IStatusBar.Stub {
         mPaused = false;
     }
 
-    public void showCustomIntentAfterKeyguard(Intent intent) {
-        mHandler.removeMessages(MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD);
-        Message m = mHandler.obtainMessage(MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD, 0, 0, intent);
-        m.sendToTarget();
-     }
-    public void setAutoRotate(boolean enabled) {
+    public void toggleLastApp() {
         synchronized (mList) {
             mHandler.removeMessages(MSG_SET_AUTOROTATE_STATUS);
             mHandler.obtainMessage(MSG_SET_AUTOROTATE_STATUS,
@@ -372,11 +367,14 @@ public class CommandQueue extends IStatusBar.Stub {
                 case MSG_HIDE_HEADS_UP:
                     mCallbacks.scheduleHeadsUpClose();
                     break;
-                case MSG_START_CUSTOM_INTENT_AFTER_KEYGUARD:
-                    mCallbacks.showCustomIntentAfterKeyguard((Intent) msg.obj);
+                case MSG_TOGGLE_LAST_APP:
+                    mCallbacks.toggleLastApp();
                     break;
-                case MSG_SET_AUTOROTATE_STATUS:
-                    mCallbacks.setAutoRotate(msg.arg1 != 0);
+                case MSG_TOGGLE_KILL_APP:
+                    mCallbacks.toggleKillApp();
+                    break;
+                case MSG_TOGGLE_SCREENSHOT:
+                    mCallbacks.toggleScreenshot();
                     break;
             }
         }

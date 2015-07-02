@@ -18,6 +18,7 @@ package com.android.systemui.statusbar.phone;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.service.gesture.EdgeGestureManager;
 import android.util.AttributeSet;
 import android.util.EventLog;
 import android.view.MotionEvent;
