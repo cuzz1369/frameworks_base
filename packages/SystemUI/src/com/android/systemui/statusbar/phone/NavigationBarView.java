@@ -133,7 +133,6 @@ public class NavigationBarView extends LinearLayout {
 
     // Navigation bar customizations
     final boolean mTablet = isTablet(mContext);
-    private boolean mNeedsNav;
     private boolean mLegacyMenu;
     private boolean mImeLayout;
     private int mLongPressTimeout;
@@ -263,11 +262,6 @@ public class NavigationBarView extends LinearLayout {
         mButtonWidth = res.getDimensionPixelSize(R.dimen.navigation_key_width);
         mMenuButtonWidth = res.getDimensionPixelSize(R.dimen.navigation_menu_key_width);
         mLayoutChangerWidth = res.getDimensionPixelSize(R.dimen.navigation_layout_changer_width);
-
-        try {
-            mNeedsNav = WindowManagerGlobal.getWindowManagerService().needsNavigationBar();
-        } catch (RemoteException ex) {
-        }
 
         /* mRestoredLayout = Settings.System.getInt(cr, Settings.System.NAVIGATION_BAR_RESTORE, 0); */
         mLegacyMenu = Settings.System.getInt(cr, Settings.System.NAVIGATION_BAR_SIDEKEYS, 1) == 1;
@@ -441,7 +435,7 @@ public class NavigationBarView extends LinearLayout {
         if (!force && hints == mNavigationIconHints) return;
         showingIME = (hints & StatusBarManager.NAVIGATION_HINT_BACK_ALT) != 0;
 
-        if (mDisplayingLayoutIndex != NavbarConstants.LAYOUT_IME && showingIME && mNeedsNav
+        if (mDisplayingLayoutIndex != NavbarConstants.LAYOUT_IME && showingIME
                 && ((mButtonLayouts > 1 && mImeLayout) || mButtonLayouts == 1)
                 && getButtonView(ACTION_BACK) == null
                 && getButtonView(ACTION_HOME) == null) {

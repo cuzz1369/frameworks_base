@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
     <!-- Hardware keys on/off option -->
-    <bool name="config_hwKeysPref">false</bool>
+    <bool name="config_hwKeysPref">true</bool>
 
     <!-- If this is true, key chords can be used to take a screen record on the device. -->
     <bool name="config_enableScreenrecordChord">true</bool>
