@@ -7609,4 +7609,9 @@
         <attr name="entries" />
         <attr name="entryValues" />
     </declare-styleable>
+    
+    <!-- Base attributes available to SlimSeekBarPreference. -->
+    <declare-styleable name="SlimSeekBarPreference">
+        <!-- No added attributes at this time -->
+    </declare-styleable>
 </resources>
