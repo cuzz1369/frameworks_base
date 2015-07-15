@@ -64,4 +64,7 @@
     <!-- Expanded Status Bar Battery Level Text Color -->
     <color name="status_bar_battery_level_text_color">#ffffff</color>
 
+    <!-- Status Bar Temp color -->
+    <color name="status_bar_temp_text_color">@color/status_bar_clock_color</color>
+
 </resources>
