@@ -1268,9 +1268,6 @@ public final class Settings {
             MOVED_TO_SECURE.add(Secure.QS_TILES);
             MOVED_TO_SECURE.add(Secure.QS_USE_MAIN_TILES);
             MOVED_TO_SECURE.add(Secure.QS_SHOW_BRIGHTNESS_SLIDER);
-            for (String s : Secure.NAVIGATION_RING_TARGETS) {
-                MOVED_TO_SECURE.add(s);
-            }
             MOVED_TO_SECURE.add(Secure.DEV_FORCE_SHOW_NAVBAR);
             MOVED_TO_SECURE.add(Secure.KEYBOARD_BRIGHTNESS);
             MOVED_TO_SECURE.add(Secure.BUTTON_BRIGHTNESS);
@@ -6656,16 +6653,6 @@ public final class Settings {
          * @hide
          */
         public static final String QS_LOCATION_ADVANCED = "qs_location_advanced";
-
-        /**
-         * Custom navring actions
-         * @hide
-         */
-        public static final String[] NAVIGATION_RING_TARGETS = new String[] {
-                "navigation_ring_targets_0",
-                "navigation_ring_targets_1",
-                "navigation_ring_targets_2",
-        };
 
         /**
          * The global recents long press activity chosen by the user.

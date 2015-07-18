@@ -47,20 +47,16 @@ public class NavigationRingHelpers {
         boolean isDefault = true;
 
         for (int i = 0; i < MAX_ACTIONS; i++) {
-            result[i] = Settings.Secure.getStringForUser(cr,
-                    Settings.Secure.NAVIGATION_RING_TARGETS[i], UserHandle.USER_CURRENT);
             if (result[i] != null) {
                 isDefault = false;
             }
         }
 
         if (isDefault) {
-            resetActionsToDefaults(context);
             result[1] = ACTION_ASSIST;
         }
 
         filterAction(result, ACTION_ASSIST, isAssistantAvailable(context));
-        filterAction(result, ACTION_TORCH, isTorchAvailable(context));
 
         return result;
     }
@@ -77,108 +73,8 @@ public class NavigationRingHelpers {
         }
     }
 
-    public static void resetActionsToDefaults(Context context) {
-        final ContentResolver cr = context.getContentResolver();
-        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[0], null,
-                UserHandle.USER_CURRENT);
-        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[1],
-                ACTION_ASSIST, UserHandle.USER_CURRENT);
-        Settings.Secure.putStringForUser(cr, Settings.Secure.NAVIGATION_RING_TARGETS[2], null,
-                UserHandle.USER_CURRENT);
-    }
-
     public static boolean isAssistantAvailable(Context context) {
         return ((SearchManager) context.getSystemService(Context.SEARCH_SERVICE))
                 .getAssistIntent(context, true, UserHandle.USER_CURRENT) != null;
-    }
-
-    public static boolean isTorchAvailable(Context context) {
-        TorchManager torchManager = (TorchManager) context.getSystemService(Context.TORCH_SERVICE);
-        return torchManager.isTorchSupported();
-    }
-
-    public static Drawable getTargetDrawable(Context context, String action) {
-        int resourceId = -1;
-
-        if (TextUtils.isEmpty(action) || action.equals(ACTION_NONE)) {
-            resourceId = R.drawable.ic_navigation_ring_empty;
-        } else if (action.equals(ACTION_SCREENSHOT)) {
-            resourceId = R.drawable.ic_navigation_ring_screenshot;
-        } else if (action.equals(ACTION_IME_SWITCHER)) {
-            resourceId = R.drawable.ic_navigation_ring_ime_switcher;
-        } else if (action.equals(ACTION_VIBRATE)) {
-            resourceId = getVibrateDrawableResId(context);
-        } else if (action.equals(ACTION_SILENT)) {
-            resourceId = getSilentDrawableResId(context);
-        } else if (action.equals(ACTION_RING_SILENT_VIBRATE)) {
-            resourceId = getRingerDrawableResId(context);
-        } else if (action.equals(ACTION_KILL_TASK)) {
-            resourceId = R.drawable.ic_navigation_ring_killtask;
-        } else if (action.equals(ACTION_STANDBY)) {
-            resourceId = R.drawable.ic_navigation_ring_standby;
-        } else if (action.equals(ACTION_TORCH)) {
-            resourceId = getTorchDrawableResId(context);
-        } else if (action.equals(ACTION_ASSIST)) {
-            resourceId = R.drawable.ic_navigation_ring_search;
-        }
-
-        if (resourceId < 0) {
-            // No pre-defined action, try to resolve URI
-            try {
-                Intent intent = Intent.parseUri(action, 0);
-                PackageManager pm = context.getPackageManager();
-                ActivityInfo info = intent.resolveActivityInfo(pm, PackageManager.GET_ACTIVITIES);
-
-                if (info != null) {
-                    return info.loadIcon(pm);
-                }
-            } catch (URISyntaxException e) {
-                // Treat as empty
-            }
-            return null;
-        }
-
-        return context.getResources().getDrawable(resourceId);
-    }
-
-    private static int getVibrateDrawableResId(Context context) {
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        if (am.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE) {
-            return R.drawable.ic_navigation_ring_vibrate;
-        } else {
-            return R.drawable.ic_navigation_ring_sound_on;
-        }
-    }
-
-    private static int getSilentDrawableResId(Context context) {
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        if (am.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
-            return R.drawable.ic_navigation_ring_silent;
-        } else {
-            return R.drawable.ic_navigation_ring_sound_on;
-        }
-    }
-
-    private static int getRingerDrawableResId(Context context) {
-        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        int ringerMode = am.getRingerMode();
-
-        if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-            return R.drawable.ic_navigation_ring_vibrate;
-        } else if (ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
-            return R.drawable.ic_navigation_ring_silent;
-        } else {
-            return R.drawable.ic_navigation_ring_sound_on;
-        }
-    }
-
-    private static int getTorchDrawableResId(Context context) {
-        TorchManager torchManager = (TorchManager) context.getSystemService(Context.TORCH_SERVICE);
-        boolean active = torchManager.isTorchOn();
-        if (active) {
-            return R.drawable.ic_navigation_ring_torch_on;
-        }
-
-        return R.drawable.ic_navigation_ring_torch_off;
     }
 }

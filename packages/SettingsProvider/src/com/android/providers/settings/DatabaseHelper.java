@@ -81,6 +81,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // settings.
     private static final int DATABASE_VERSION = 125;
 
+    private static final String HEADSET = "_headset";
+    private static final String SPEAKER = "_speaker";
+    private static final String EARPIECE = "_earpiece";
+
     private Context mContext;
     private int mUserHandle;
 
@@ -1927,14 +1931,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 if (stmt != null) stmt.close();
             }
             upgradeVersion = 120;
-        }
-
-        if (upgradeVersion < 121) {
-            String[] settingsToMove = Settings.Secure.NAVIGATION_RING_TARGETS;
-
-            moveSettingsToNewTable(db, TABLE_SYSTEM, TABLE_SECURE,
-                    settingsToMove, true);
-            upgradeVersion = 121;
         }
 
         if (upgradeVersion < 122) {

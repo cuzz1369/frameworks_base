@@ -151,7 +151,6 @@ public class ActionTarget {
             return true;
         } else if (action.equals(ACTION_TORCH)) {
             TorchManager torchManager = (TorchManager) mContext.getSystemService(Context.TORCH_SERVICE);
-            torchManager.toggleTorch();
             return true;
         } else {
             try {
