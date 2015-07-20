@@ -3774,15 +3774,6 @@ public final class Settings {
         public static final String STATUS_BAR_SHOW_WEATHER = "status_bar_show_weather";
 
         /**
-          * Volume keys control cursor in text fields (default is 0)
-          * 0 - Disabled
-          * 1 - Volume up/down moves cursor left/right
-          * 2 - Volume up/down moves cursor right/left
-          * @hide
-          */
-         public static final String VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
-
-        /**
          * Show search bar in recents
          * @hide
          */
@@ -4024,15 +4015,6 @@ public final class Settings {
 	 */
 	public static final String HFM_DISABLE_ADS = "hfm_disable_ads";
 
-
-
-        /**
-         * Override and forcefully disable the fullscreen keyboard
-         * @hide
-         */
-        public static final String DISABLE_FULLSCREEN_KEYBOARD = "disable_fullscreen_keyboard";
-
-
         /**
          * Automatic keyboard rotation timeout.  0 to disable completely.
          * @hide
@@ -4184,18 +4166,6 @@ public final class Settings {
         public static final String DISABLE_FULLSCREEN_KEYBOARD = "disable_fullscreen_keyboard";
 
         /**
-         * Whether to show the IME switcher in the status bar
-         * @hide
-         */
-        public static final String STATUS_BAR_IME_SWITCHER = "status_bar_ime_switcher";
-
-        /**
-         * Automatic keyboard rotation timeout.  0 to disable completely.
-         * @hide
-         */
-        public static final String KEYBOARD_ROTATION_TIMEOUT = "keyboard_rotation_timeout";
-
-        /**
          * Whether custom hardware key rebinding is enabled
          * @hide
          */
@@ -4230,35 +4200,6 @@ public final class Settings {
         public static final String KEY_HOME_ACTION = "key_home_action";
 
         /**
-         * Action to perform when the home key is long-pressed. (default: ACTION_RECENTS)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_HOME_LONG_PRESS_ACTION = "key_home_long_press_action";
-
-        /**
-         * Action to perform when the home key is double taped. (default: ACTION_NULL)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_home_double_tap_action";
-
-        /**
-         * Action to perform when the menu key is pressed. (default: ACTION_MENU)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_MENU_ACTION = "key_menu_action";
-
-        /**
-         * Action to perform when the menu key is long-pressed.
-         * (Default is ACTION_NULL on devices with a search key, ACTION_SEARCH on devices without)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_MENU_LONG_PRESS_ACTION = "key_menu_long_press_action";
-
-        /**
          * Action to perform when the menu key is double tapped. (default: ACTION_NULL)
          * (See ButtonsConstants.java for valid values)
          * @hide
@@ -4266,41 +4207,11 @@ public final class Settings {
         public static final String KEY_MENU_DOUBLE_TAP_ACTION = "key_menu_double_tap_action";
 
         /**
-         * Action to perform when the assistant (search) key is pressed. (default: ACTION_SEARCH)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_ASSIST_ACTION = "key_assist_action";
-
-        /**
-         * Action to perform when the assistant (search) key is long-pressed.
-         * (default: ACTION_VOICE_SEARCH)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_ASSIST_LONG_PRESS_ACTION = "key_assist_long_press_action";
-
-        /**
          * Action to perform when the assistant (search) key is double tapped.
          * (default: ACTION_NULL) (See ButtonsConstants.java for valid values)
          * @hide
          */
         public static final String KEY_ASSIST_DOUBLE_TAP_ACTION = "key_assist_double_tap_action";
-
-        /**
-         * Action to perform when the app switch key is pressed. (default: ACTION_RECENTS)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_APP_SWITCH_ACTION = "key_app_switch_action";
-
-        /**
-         * Action to perform when the app switch key is long-pressed. (default: ACTION_NULL)
-         * (See ButtonsConstants.java for valid values)
-         * @hide
-         */
-        public static final String KEY_APP_SWITCH_LONG_PRESS_ACTION =
-                "key_app_switch_long_press_action";
 
         /**
          * Action to perform when the app switch key is double tapped. (default: ACTION_NULL)
@@ -4332,12 +4243,6 @@ public final class Settings {
          */
         public static final String KEY_CAMERA_DOUBLE_TAP_ACTION =
                 "key_camera_double_tap_action";
-
-        /**
-         * Forces formal text input.  1 to replace emoticon key with enter key.
-         * @hide
-         */
-        public static final String FORMAL_TEXT_INPUT = "formal_text_input";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

@@ -62,9 +62,6 @@
   <!-- Config IME switcher -->
   <java-symbol type="bool" name="config_show_IMESwitcher" />
   
-  <!-- Ambient Display-->
-  <java-symbol type="bool" name="config_dozeUseAccelerometer" />
-
   <!-- Slim recent app screen-->
   <java-symbol type="integer" name="config_recentDefaultDur" />
   <java-symbol type="integer" name="config_recentExitDur" />
