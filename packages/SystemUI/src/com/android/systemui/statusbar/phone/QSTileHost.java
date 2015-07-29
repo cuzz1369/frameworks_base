@@ -332,6 +332,8 @@ public class QSTileHost implements QSTile.Host {
                 return new FlashlightTile(this);
             case QSConstants.TILE_LOCATION:
                 return new LocationTile(this);
+            case QSConstants.TILE_AMBIENT_DISPLAY:
+                return new AmbientDisplayTile(this);
             case QSConstants.TILE_CAST:
                 return new CastTile(this);
             case QSConstants.TILE_HOTSPOT:
