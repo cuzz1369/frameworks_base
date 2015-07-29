@@ -188,10 +188,6 @@ public class NavigationBarView extends BaseNavigationBar {
         mTaskSwitchHelper.setBar(phoneStatusBar);
     }
 
-    public void setTransparencyAllowedWhenVertical(boolean allowed) {
-        mBarTransitions.setTransparencyAllowedWhenVertical(allowed);
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         initDownStates(event);
