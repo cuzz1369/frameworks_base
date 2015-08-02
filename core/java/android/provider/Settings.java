@@ -3797,6 +3797,20 @@ public final class Settings {
          */
         public static final String RECENT_PANEL_FAVORITES = "recent_panel_favorites";
 
+         /**
+         * Allows to show the background activity back the lockscreen
+         * 0 = off
+         * 1 = on
+         * @hide
+         */
+        public static final String LOCKSCREEN_SEE_THROUGH = "lockscreen_see_through";
+
+        /**
+         * Allows setting the radius for lockscreen blur
+         * @hide
+         */
+        public static final String LOCKSCREEN_BLUR_RADIUS = "lockscreen_blur_radius";
+
         /**
          * Recent panel expanded mode (auto = 0, always = 1, never = 2).
          * default = 0.

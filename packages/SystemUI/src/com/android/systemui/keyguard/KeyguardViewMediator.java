@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.UserInfo;
+import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -2061,4 +2062,7 @@ public class KeyguardViewMediator extends SystemUI {
         return fp != null && fp.userEnrolled() && lockPatternUtils.usingFingerprint();
     }
 
+    public void setBackgroundBitmap(Bitmap bmp) {
+        mStatusBarKeyguardViewManager.setBackgroundBitmap(bmp);
+    }
 }
