@@ -336,4 +336,8 @@
     <!-- Screen record notification error title -->
     <string name="screenrecord_notif_error">Unable to record screen</string>
 
+
+    <!-- Empty view text for CustomQSTile -->
+    <string name="quick_settings_custom_qs_detail_empty_text">No items found</string>
+
 </resources>
