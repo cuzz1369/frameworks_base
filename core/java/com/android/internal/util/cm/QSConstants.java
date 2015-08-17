@@ -51,8 +51,9 @@ public class QSConstants {
     public static final String TILE_SYNC = "sync";
     public static final String TILE_USB_TETHER = "usb_tether";
     public static final String TILE_VISUALIZER = "visualizer";
+    public static final String TILE_VOLUME = "volume_panel";
     public static final String TILE_WIFI = "wifi";
-    public static final String TILE_THEMES = "toggleThemes"; 
+    public static final String TILE_THEMES = "toggleThemes";
     public static final String TILE_KERNEL_ADIUTOR = "kernel_adiutor";
     public static final String TILE_MUSIC = "music";
     public static final String TILE_SCREENSHOT = "screenshot";
@@ -93,6 +94,7 @@ public class QSConstants {
         STATIC_TILES_AVAILABLE.add(TILE_ROAMING);
         STATIC_TILES_AVAILABLE.add(TILE_ROTATION);
         STATIC_TILES_AVAILABLE.add(TILE_SCREENRECORD);
+        STATIC_TILES_AVAILABLE.add(TILE_VOLUME);
         STATIC_TILES_AVAILABLE.add(TILE_SCREEN_TIMEOUT);
         STATIC_TILES_AVAILABLE.add(TILE_SYNC);
         STATIC_TILES_AVAILABLE.add(TILE_USB_TETHER);
