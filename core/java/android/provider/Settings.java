@@ -3816,7 +3816,15 @@ public final class Settings {
          *
          * @hide
          */
+
         public static final String RECENT_PANEL_BG_COLOR = "recent_panel_bg_color";
+
+        /**
+         * Toast icon
+         *
+         * @hide
+         */
+        public static final String TOAST_ICON = "toast_icon";
 
         /**
          * Recent card background color
