@@ -38,5 +38,10 @@
     <dimen name="status_bar_weather_padding_end">16dp</dimen>
 
     <dimen name="detail_exterior_padding">16dp</dimen>
+    
+     <!-- Slim recent app sidebar -->
+    <dimen name="recent_app_sidebar_item_size">60dp</dimen>
+    <dimen name="recent_app_sidebar_item_padding">2dp</dimen>
+    <dimen name="recent_app_sidebar_item_title_text_size">11sp</dimen>
 
 </resources>
