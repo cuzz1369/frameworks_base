@@ -689,6 +689,15 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
             mWeatherTempColor = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_WEATHER_COLOR, 0xFFFFFFFF, mCurrentUserId);
 
+            boolean navLeftInLandscape = Settings.System.getIntForUser(resolver,
+                    Settings.System.NAVBAR_LEFT_IN_LANDSCAPE, 0, UserHandle.USER_CURRENT) == 1;
+            if (mNavigationBarView != null) {
+                mNavigationBarView.setLeftInLandscape(navLeftInLandscape);
+            }
+            if (mSearchPanelView != null) {
+                mSearchPanelView.setLeftNavbar(navLeftInLandscape);
+            }
+
             mWeatherTempSize = Settings.System.getIntForUser(resolver,
                     Settings.System.STATUS_BAR_WEATHER_SIZE, 14, mCurrentUserId);
         }
