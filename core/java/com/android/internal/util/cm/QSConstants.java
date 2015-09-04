@@ -57,6 +57,9 @@ public class QSConstants {
     public static final String TILE_KERNEL_ADIUTOR = "kernel_adiutor";
     public static final String TILE_MUSIC = "music";
     public static final String TILE_SCREENSHOT = "screenshot";
+   /* public static final String TILE_SLIMACTION = "slimaction"; */
+    public static final String TILE_SLIM_FLOATS = "slim_floats";
+
 
     public static final String DYNAMIC_TILE_NEXT_ALARM = "next_alarm";
     public static final String DYNAMIC_TILE_IME_SELECTOR = "ime_selector";
@@ -100,11 +103,13 @@ public class QSConstants {
         STATIC_TILES_AVAILABLE.add(TILE_USB_TETHER);
         STATIC_TILES_AVAILABLE.add(TILE_VISUALIZER);
         STATIC_TILES_AVAILABLE.add(TILE_WIFI);
- 	STATIC_TILES_AVAILABLE.add(TILE_THEMES);
- 	STATIC_TILES_AVAILABLE.add(TILE_KERNEL_ADIUTOR);
- 	STATIC_TILES_AVAILABLE.add(TILE_MUSIC);
+ 	    STATIC_TILES_AVAILABLE.add(TILE_THEMES);
+ 	    STATIC_TILES_AVAILABLE.add(TILE_KERNEL_ADIUTOR);
+ 	    STATIC_TILES_AVAILABLE.add(TILE_MUSIC);
         STATIC_TILES_AVAILABLE.add(TILE_SCREENSHOT);
-        
+        /* STATIC_TILES_AVAILABLE.add(TILE_SLIMACTION); */
+        STATIC_TILES_AVAILABLE.add(TILE_SLIM_FLOATS);
+
         DYNAMIC_TILES_AVAILABLE.add(DYNAMIC_TILE_NEXT_ALARM);
         DYNAMIC_TILES_AVAILABLE.add(DYNAMIC_TILE_IME_SELECTOR);
         DYNAMIC_TILES_AVAILABLE.add(DYNAMIC_TILE_SU);

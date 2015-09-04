@@ -67,6 +67,7 @@ import com.android.systemui.qs.tiles.ScreenrecordTile;
 import com.android.systemui.qs.tiles.ScreenshotTile;
 import com.android.systemui.qs.tiles.VolumeTile;
 import com.android.systemui.qs.tiles.ScreenTimeoutTile;
+import com.android.systemui.qs.tiles.SlimFloatsTile;
 import com.android.systemui.qs.tiles.WifiTile;
 import com.android.systemui.qs.tiles.CandyTile;
 import com.android.systemui.qs.tiles.ThemesTile;
@@ -388,7 +389,7 @@ public class QSTileHost implements QSTile.Host {
             case QSConstants.TILE_SYNC:
                 return new SyncTile(this);
             case QSConstants.TILE_CANDY:
-		return new CandyTile(this);
+		        return new CandyTile(this);
             case QSConstants.TILE_SCREENRECORD:
                 return new ScreenrecordTile(this);
             case QSConstants.TILE_THEMES:
@@ -399,6 +400,8 @@ public class QSTileHost implements QSTile.Host {
                 return new MusicTile(this);
             case QSConstants.TILE_SCREENSHOT:
                 return new ScreenshotTile(this);
+            case QSConstants.TILE_SLIM_FLOATS:
+                return new SlimFloatsTile(this);
             default:
                 throw new IllegalArgumentException("Bad tile spec: " + tileSpec);
         }
