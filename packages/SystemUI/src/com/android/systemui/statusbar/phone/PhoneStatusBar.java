@@ -5168,6 +5168,263 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         mVisualizerView.setVisible(true);
     }
 
+    public boolean isScreenOnFromKeyguard() {
+        return mScreenOnFromKeyguard;
+    }
+
+    /**
+     * This handles long-press of both back and recents.  They are
+     * handled together to capture them both being long-pressed
+     * at the same time to exit screen pinning (lock task).
+     *
+     * When accessibility mode is on, only a long-press from recents
+     * is required to exit.
+     *
+     * In all other circumstances we try to pass through long-press events
+     * for Back, so that apps can still use it.  Which can be from two things.
+     * 1) Not currently in screen pinning (lock task).
+     * 2) Back is long-pressed without recents.
+     */
+    private void handleLongPressBackRecents(View v) {
+        try {
+            boolean sendBackLongPress = false;
+            boolean hijackRecentsLongPress = false;
+            IActivityManager activityManager = ActivityManagerNative.getDefault();
+            boolean isAccessiblityEnabled = mAccessibilityManager.isEnabled();
+            if (activityManager.isInLockTaskMode() && !isAccessiblityEnabled) {
+                long time = System.currentTimeMillis();
+                // If we recently long-pressed the other button then they were
+                // long-pressed 'together'
+                if ((time - mLastLockToAppLongPress) < LOCK_TO_APP_GESTURE_TOLERENCE) {
+                    activityManager.stopLockTaskModeOnCurrent();
+                    // When exiting refresh disabled flags.
+                    mNavigationBarView.setDisabledFlags(mDisabled, true);
+                } else if ((NavbarEditor.NAVBAR_BACK.equals(v.getTag()))
+                        && !mNavigationBarView.getRecentsButton().isPressed()) {
+                    // If we aren't pressing recents right now then they presses
+                    // won't be together, so send the standard long-press action.
+                    sendBackLongPress = true;
+                } else if (NavbarEditor.NAVBAR_RECENT.equals(v.getTag()) && !activityManager.isInLockTaskMode()) {
+                    hijackRecentsLongPress = true;
+                }
+                mLastLockToAppLongPress = time;
+            } else {
+                // If this is back still need to handle sending the long-press event.
+                if (NavbarEditor.NAVBAR_BACK.equals(v.getTag())) {
+                    sendBackLongPress = true;
+                } else if (NavbarEditor.NAVBAR_RECENT.equals(v.getTag()) && !activityManager.isInLockTaskMode()) {
+                    hijackRecentsLongPress = true;
+                } else if (isAccessiblityEnabled && activityManager.isInLockTaskMode()) {
+                    // When in accessibility mode a long press that is recents (not back)
+                    // should stop lock task.
+                    activityManager.stopLockTaskModeOnCurrent();
+                    // When exiting refresh disabled flags.
+                    mNavigationBarView.setDisabledFlags(mDisabled, true);
+                }
+            }
+            if (sendBackLongPress) {
+                KeyButtonView keyButtonView = (KeyButtonView) v;
+                keyButtonView.sendEvent(KeyEvent.ACTION_DOWN, KeyEvent.FLAG_LONG_PRESS);
+                keyButtonView.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
+            }
+
+            if (hijackRecentsLongPress) {
+                // If there is a user-selected, registered handler for the
+                // recents long press, start the Intent.  Otherwise,
+                // perform the default action, which is last app switching.
+
+                // Copy it so the value doesn't change between now and when the activity is started.
+                ComponentName customRecentsLongPressHandler = mCustomRecentsLongPressHandler;
+                if (customRecentsLongPressHandler != null) {
+                    startCustomRecentsLongPressActivity(customRecentsLongPressHandler);
+                } else {
+                    ActionUtils.switchToLastApp(mContext, mCurrentUserId);
+                }
+            }
+        } catch (RemoteException e) {
+            Log.d(TAG, "Unable to reach activity manager", e);
+        }
+    }
+
+    protected View.OnTouchListener mRecentsPreloadOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            int action = event.getAction() & MotionEvent.ACTION_MASK;
+
+            // Handle Document switcher
+            // Additional optimization when we have software system buttons - start loading the recent
+            // tasks on touch down
+            if (action == MotionEvent.ACTION_DOWN) {
+                preloadRecents();
+            } else if (action == MotionEvent.ACTION_CANCEL) {
+                cancelPreloadingRecents();
+            } else if (action == MotionEvent.ACTION_UP) {
+                if (!v.isPressed()) {
+                    cancelPreloadingRecents();
+                }
+            }
+
+            // Handle custom recents long press
+            if (action == MotionEvent.ACTION_CANCEL ||
+                action == MotionEvent.ACTION_UP) {
+                cleanupCustomRecentsLongPressHandler();
+            }
+            return false;
+        }
+    };
+
+    /**
+     * If a custom Recents Long Press activity was dispatched, then the certain
+     * handlers need to be cleaned up after the event ends.
+     */
+    private void cleanupCustomRecentsLongPressHandler() {
+        if (mCustomRecentsLongPressed) {
+            mNavigationBarView.setSlippery(false);
+            mNavigationBarView.enableSearchBar();
+        }
+        mCustomRecentsLongPressed = false;
+    }
+
+    /**
+     * An ACTION_RECENTS_LONG_PRESS intent was received, and a custom handler is
+     * set and points to a valid app.  Start this activity.
+     */
+    private void startCustomRecentsLongPressActivity(ComponentName customComponentName) {
+        Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Include the package name of the app currently in the foreground
+        IActivityManager am = ActivityManagerNative.getDefault();
+        List<ActivityManager.RecentTaskInfo> recentTasks = null;
+        try {
+            recentTasks = am.getRecentTasks(
+                    1, ActivityManager.RECENT_WITH_EXCLUDED, UserHandle.myUserId());
+        } catch (RemoteException e) {
+            Log.e(TAG, "Cannot get recent tasks", e);
+        }
+        if (recentTasks != null && recentTasks.size() > 0) {
+            String pkgName = recentTasks.get(0).baseIntent.getComponent().getPackageName();
+            intent.putExtra(Intent.EXTRA_CURRENT_PACKAGE_NAME, pkgName);
+        }
+
+        intent.setComponent(customComponentName);
+        try {
+            // Allow the touch event to continue into the new activity.
+            mNavigationBarView.setSlippery(true);
+            mNavigationBarView.disableSearchBar();
+            mCustomRecentsLongPressed = true;
+
+            mContext.startActivityAsUser(intent, new UserHandle(UserHandle.USER_CURRENT));
+
+        } catch (ActivityNotFoundException e) {
+            Log.e(TAG, "Cannot start activity", e);
+
+            // If the activity failed to launch, clean up
+            cleanupCustomRecentsLongPressHandler();
+        }
+    }
+
+    /**
+     * Get component name for the recent long press setting. Null means default switch to last app.
+     *
+     * Note: every time packages changed, the setting must be re-evaluated.  This is to check that the
+     * component was not uninstalled or disabled.
+     */
+    private void updateCustomRecentsLongPressHandler(boolean scanPackages) {
+        // scanPackages should be true when the PhoneStatusBar is starting for
+        // the first time, and when any package activity occurred.
+        if (scanPackages) {
+            updateCustomRecentsLongPressCandidates();
+        }
+
+        String componentString = Settings.Secure.getString(mContext.getContentResolver(),
+                Settings.Secure.RECENTS_LONG_PRESS_ACTIVITY);
+        if (componentString == null) {
+            mCustomRecentsLongPressHandler = null;
+            return;
+        }
+
+        ComponentName customComponentName = ComponentName.unflattenFromString(componentString);
+        synchronized (mCustomRecentsLongPressHandlerCandidates) {
+            for (ComponentName candidate : mCustomRecentsLongPressHandlerCandidates) {
+                if (candidate.equals(customComponentName)) {
+                    // Found match
+                    mCustomRecentsLongPressHandler = customComponentName;
+
+                    return;
+                }
+            }
+
+            // Did not find match, probably because the selected application has
+            // now been uninstalled for some reason. Since user-selected app is
+            // still saved inside Settings, PhoneStatusBar should fall back to
+            // the default for now.  (We will update this either when the
+            // package is reinstalled or when the user selects another Setting.)
+            mCustomRecentsLongPressHandler = null;
+        }
+    }
+
+    /**
+     * Updates the cache of Recents Long Press applications.
+     *
+     * These applications must:
+     * - handle the Intent.ACTION_RECENTS_LONG_PRESS (which is permissions protected); and
+     * - not be disabled by the user or the system.
+     *
+     * More than one handler can be a candidate.  When the action is invoked,
+     * the user setting (stored in Settings.Secure) is consulted.
+     */
+    private void updateCustomRecentsLongPressCandidates() {
+        synchronized (mCustomRecentsLongPressHandlerCandidates) {
+            mCustomRecentsLongPressHandlerCandidates.clear();
+
+            PackageManager pm = mContext.getPackageManager();
+            Intent intent = new Intent(Intent.ACTION_RECENTS_LONG_PRESS);
+
+            // Search for all apps that can handle ACTION_RECENTS_LONG_PRESS
+            List<ResolveInfo> activities = pm.queryIntentActivities(intent,
+                    PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo info : activities) {
+                // Only cache packages that are not disabled
+                int packageState = mContext.getPackageManager().getApplicationEnabledSetting(
+                        info.activityInfo.packageName);
+
+                if (packageState != PackageManager.COMPONENT_ENABLED_STATE_DISABLED &&
+                    packageState != PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER) {
+
+                    mCustomRecentsLongPressHandlerCandidates.add(
+                        new ComponentName(info.activityInfo.packageName, info.activityInfo.name));
+                }
+
+            }
+        }
+    }
+
+    private ActivityManager.RunningTaskInfo getLastTask(final ActivityManager am) {
+        final String defaultHomePackage = resolveCurrentLauncherPackage();
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(5);
+
+        for (int i = 1; i < tasks.size(); i++) {
+            String packageName = tasks.get(i).topActivity.getPackageName();
+            if (!packageName.equals(defaultHomePackage)
+                    && !packageName.equals(mContext.getPackageName())) {
+                return tasks.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    private String resolveCurrentLauncherPackage() {
+        final Intent launcherIntent = new Intent(Intent.ACTION_MAIN)
+                .addCategory(Intent.CATEGORY_HOME);
+        final PackageManager pm = mContext.getPackageManager();
+        final ResolveInfo launcherInfo = pm.resolveActivity(launcherIntent, 0);
+        return launcherInfo.activityInfo.packageName;
+    }
+
+    // Recents
+
     @Override
     protected void showRecents(boolean triggeredFromAltTab) {
         // Set the recents visibility flag
