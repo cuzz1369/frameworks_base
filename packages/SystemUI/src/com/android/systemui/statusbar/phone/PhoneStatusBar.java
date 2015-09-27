@@ -4109,10 +4109,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         resetUserSetupObserver();
         setControllerUsers();
 
-        if (mNavigationBarView != null) {
-            mNavigationBarView.updateSettings();
-        }
-
         mKeyguardWallpaper = wm.getKeyguardBitmap();
         updateMediaMetaData(true);
     }
