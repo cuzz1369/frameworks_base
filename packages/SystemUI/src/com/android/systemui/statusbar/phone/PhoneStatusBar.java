@@ -3755,7 +3755,7 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         makeStatusBarView();
         repositionNavigationBar();
 
-        // re-add status icons
+        // recreate StatusBarIconViews.
         for (int i = 0; i < nIcons; i++) {
             StatusBarIcon icon = icons.get(i);
             String slot = iconSlots.get(i);
@@ -3848,10 +3848,6 @@ public class PhoneStatusBar extends BaseStatusBar implements DemoMode,
         }
         if (mBrightnessMirrorController != null) {
             mBrightnessMirrorController.updateResources();
-        }
-
-        if (mNavigationBarView != null && updateNavBar)  {
-            mNavigationBarView.updateResources(getNavbarThemedResources());
         }
     }
 
